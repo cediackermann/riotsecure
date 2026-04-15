@@ -1,0 +1,136 @@
+{
+  "id": "brawl",
+  "url": "/brawl/",
+  "blocks": [
+    {
+      "block_id": "brawl",
+      "chunked": false,
+      "type": "hero",
+      "level": 1,
+      "title": "Brawl"
+    },
+    {
+      "block_id": "brawl#overview",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "A WebAssembly Runtime for Portable, Updatable IoT Applications",
+      "text": "BRAWL is RIoT Secure’s lightweight WebAssembly (WASM) runtime designed specifically for resource-constrained IoT devices. Built on open standards such as WebAssembly and WASI, BRAWL enables developers to write portable, device-agnostic application logic that can be securely deployed, updated, and executed across heterogeneous hardware platforms. By adopting WebAssembly’s sandboxed binary format - the same technology powering modern browsers and cloud runtimes - BRAWL introduces a standardized execution layer for embedded systems. This allows application logic, AI-related workloads, and business rules to evolve independently of long-lived device firmware, dramatically simplifying lifecycle management in the field.",
+      "emphasis": [
+        "BRAWL",
+        "WebAssembly (WASM)",
+        "dramatically simplifying lifecycle management"
+      ]
+    },
+    {
+      "block_id": "brawl#wasm-runtime",
+      "chunked": true,
+      "type": "callout",
+      "level": 2,
+
+      "title": null,
+      "text": "BRAWL runs WASM bytecode, delivered via RIoT Secure's management platform. This lets you leverage standard tooling (wasm-opt, language compilers, debuggers), for microcontroller firmware development.",
+      "emphasis": []
+    },
+    {
+      "block_id": "brawl#portable",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Write Once, Run Anywhere - Now for IoT",
+      "text": "In traditional embedded development, identical application logic must be recompiled and redeployed separately for each target architecture, resulting in widely varying firmware sizes and complex validation processes. BRAWL changes this model by standardizing application logic into WebAssembly bytecode.",
+      "emphasis": ["recompiled and redeployed separately", "BRAWL"]
+    },
+    {
+      "block_id": "brawl#firmware-sketch",
+      "chunked": false,
+      "type": "image",
+      "level": 2,
+
+      "title": null,
+      "src": "images/brawl-sketch-sizes.png",
+      "alt": "Diagram showing the Arduino Sketch and compiled native sizes"
+    },
+    {
+      "block_id": "brawl#firmware-size-explained",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": null,
+      "text": "Despite identical logic, firmware sizes vary dramatically. When compiled to WebAssembly and executed within the BRAWL runtime, the same application logic results in a 256-byte WASM module, deployable across all targets - independent of CPU architecture. This consistency reduces bandwidth usage, simplifies validation, and enables reliable firmware-over-the-air (FOTA) updates even over narrowband networks.\n\nWebAssembly: &rarr; [`Blink.wat`](Blink.wat.txt). Using `wat2wasm` the resulting [`Blink.wasm`](Blink.wasm) file produced is a miniscule 256 bytes!",
+      "emphasis": ["firmware sizes vary dramatically", "BRAWL"]
+    },
+    {
+      "block_id": "brawl#wasm-interpreter-visual",
+      "chunked": false,
+      "type": "image",
+      "level": 2,
+      "title": null,
+      "src": "images/brawl-translation.png",
+      "alt": "Diagram showing the BRAWL translation process from source to WebAssembly"
+    },
+    {
+      "block_id": "brawl#designed-for-constrained",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Designed for Constrained Devices - Without Compromise",
+      "text": "BRAWL is purpose-built for embedded systems, delivering a secure, sandboxed runtime with near-native performance through optimized native bindings. The runtime provides controlled access to essential device functionality while preserving isolation and predictability. BRAWL is purpose-built for IoT, bringing the power of WebAssembly directly to microcontrollers. It delivers a secure, sandboxed runtime with lightweight execution, offering built-in bindings for essential peripherals like GPIO, I2C, SPI, UART and 1-Wire, while safely extending to native functions when needed. By adopting WebAssembly’s standardized instruction set, BRAWL ensures portability and predictability across devices.",
+      "emphasis": ["BRAWL", "BRAWL"]
+    },
+    {
+      "block_id": "brawl#wasi-api",
+      "chunked": true,
+      "type": "text",
+      "level": 4,
+
+      "title": null,
+      "text": "WASM System Interface Definitions:\n\n- [`brawl/device.gpio`](/brawl?api=brawl.device.gpio)\n- [`brawl/device.i2c`](/brawl?api=brawl.device.i2c)\n- [`brawl/device.onewire`](/brawl?api=brawl.device.onewire)\n- [`brawl/device.spi`](/brawl?api=brawl.device.spi)\n- [`brawl/device.uart`](/brawl?api=brawl.device.uart)\n- [`brawl/device.matrix`](/brawl?api=brawl.device.matrix)",
+      "emphasis": ["WASM System Interface Definitions"]
+    },
+    {
+      "block_id": "brawl#enable-ai",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Enabling AI and Intelligent Edge Workloads",
+      "text": "As AI and advanced data processing move closer to the edge, application logic and models evolve far more rapidly than underlying device firmware. **BRAWL** provides a natural execution layer for these fast-moving workloads, enabling AI-related logic to be delivered as compact, updatable WebAssembly modules. Combined with RIoT Secure’s lifecycle management platform, this allows organizations to:\n\n- Update application logic and AI workflows without touching base firmware\n- Reduce deployment risk through smaller, verifiable updates\n- Maintain long-lived devices while continuously improving functionality\n\nThis decoupling is critical for operating intelligent IoT systems at scale.",
+      "emphasis": []
+    },
+    {
+      "block_id": "brawl#secure-delivery",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Secure Delivery and Lifecycle Integration",
+      "text": "BRAWL is tightly integrated with the RIoT Secure Platform. WebAssembly modules are securely delivered and managed through OASIS, using µTLS for efficient, encrypted communication. This ensures that every deployed module is authenticated, versioned, and traceable throughout its lifecycle. For environments where a dedicated application microcontroller is preferred, BRAWL complements - and can replace - FUSION, offering a software-defined alternative to hardware sandboxing while retaining the same lifecycle governance model.",
+      "emphasis": ["BRAWL", "OASIS", "µTLS", "FUSION"]
+    },
+    {
+      "block_id": "brawl#future-iot",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Built for the Future of IoT",
+      "text": "As the WebAssembly ecosystem continues to evolve, BRAWL is designed to take advantage of emerging standards such as WASI, WASI-IoT, and next-generation cryptographic extensions. This positions BRAWL as a future-ready execution environment capable of spanning microcontrollers at the edge, simulation environments, and even digital twins in the cloud. Just as Java and .NET standardized application development for servers and desktops, WebAssembly is standardizing execution across the web and cloud. BRAWL brings that same level of portability, safety, and predictability to IoT - enabling a single execution model from prototype to production, and from device to cloud.",
+      "emphasis": ["BRAWL"]
+    },
+    {
+      "block_id": "brawl#footnote",
+      "chunked": true,
+      "type": "footnote",
+      "level": 2,
+
+      "title": null,
+      "text": "BRAWL - portable execution for intelligent IoT, built on WebAssembly and designed for lifecycle management at scale.",
+      "emphasis": []
+    }
+  ]
+}

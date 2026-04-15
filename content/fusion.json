@@ -1,0 +1,158 @@
+{
+  "id": "fusion",
+  "url": "/fusion/",
+  "blocks": [
+    {
+      "block_id": "fusion",
+      "chunked": false,
+      "type": "hero",
+      "level": 1,
+      "title": "Fusion"
+    },
+    {
+      "block_id": "fusion#overview",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Hardware Sandbox for Deterministic, Developer-Owned Execution",
+      "text": "FUSION is RIoT Secure's hardware sandbox architecture, designed to give device developers full, unrestricted control over their own execution environment, while preserving secure communication and lifecycle management through an independent system component. At its core, FUSION enables a strict separation of concerns by dedicating a microcontroller exclusively to the customer’s application logic. This dedicated microcontroller is fully owned and controlled by the developer or device manufacturer - free from interference, shared resources, or runtime constraints imposed by the communication and lifecycle management stack.",
+      "emphasis": [
+        "FUSION",
+        "full, unrestricted control over their own execution environment",
+        "strict separation of concerns"
+      ]
+    },
+    {
+      "block_id": "fusion#seperation-of-concerns",
+      "chunked": false,
+      "type": "text",
+      "level": 2,
+
+      "title": "True Hardware Separation - Not Time Slicing"
+    },
+    {
+      "block_id": "fusion#architecture",
+      "chunked": false,
+      "type": "image",
+      "level": 2,
+
+      "title": "Custom Hardware - Lifecycle Management and Security Guaranteed",
+      "src": "images/fusion-overview.png",
+      "alt": "Diagram of lifecycle-first hardware architecture with separated application and security/communication domains"
+    },
+    {
+      "block_id": "fusion#sandbox",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": null,
+      "text": "Unlike software-based sandboxes or shared-runtime approaches, FUSION enforces isolation at the hardware level. Customer applications run on their own microcontroller, with guaranteed access to CPU, memory, peripherals, and real-time scheduling - entirely independent of the RIoT Secure client. This means:\n\n- No competition for CPU cycles\n- No shared memory or runtime contention\n- No impact on real-time behavior\n- No restrictions on programming models or toolchains\n\nDevelopers are free to use any programming language, framework, RTOS, or bare-metal approach that best suits their application - from hard real-time control loops to advanced signal processing or AI acceleration.",
+      "emphasis": [
+        "FUSION",
+        "hardware level",
+        "any programming language, framework, RTOS, or bare-metal approach"
+      ]
+    },
+    {
+      "block_id": "fusion#independent-communication",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Independent Communication & Lifecycle Control",
+      "text": "FUSION ensures the customer application runs independently, the RIoT Secure client executes on a separate communication module or microcontroller. This component is responsible for secure communication, provisioning, identity, and lifecycle operations - and operates entirely independently of the customer’s execution environment. This architectural split ensures that:\n\n- Communication and security updates never interfere with application timing\n- Lifecycle management can evolve without impacting customer firmware\n- Application failures cannot compromise device identity or connectivity\n\nThe result is a robust system where long-lived device control and fast-evolving application logic coexist safely, without forcing trade-offs between security and determinism.",
+      "emphasis": [
+        "FUSION",
+        "entirely independently",
+        "long-lived device control and fast-evolving application logic coexist safely"
+      ]
+    },
+    {
+      "block_id": "fusion#real-world",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Designed for Real-World Embedded Systems",
+      "text": "FUSION is purpose-built for real-world embedded deployments where determinism, reliability, and long-term maintainability are non-negotiable. By isolating responsibilities across dedicated hardware components, FUSION avoids the complexity and fragility often introduced by monolithic firmware designs. This approach is particularly valuable in environments that require:\n\n- Hard real-time guarantees\n- Safety- or mission-critical behavior\n- Long operational lifetimes\n- Heterogeneous hardware and peripherals\n\nFUSION allows device makers to evolve communication stacks, security mechanisms, and lifecycle features independently — without requiring invasive changes to application firmware.",
+      "emphasis": [
+        "FUSION"
+      ]
+    },
+    {
+      "block_id": "fusion#foundation",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "A Foundation for Scalable Lifecycle Management",
+      "text": "Within the RIoT Secure Platform, FUSION acts as the hardware foundation for secure lifecycle management. It ensures that provisioning, updates, and fleet-wide operations can be performed reliably across large deployments, while preserving complete autonomy for customer applications. For teams that prefer a portable, software-defined execution model instead of a dedicated application microcontroller, FUSION can be complemented or replaced by BRAWL, RIoT Secure’s WebAssembly-based execution environment - without changing the surrounding lifecycle infrastructure.",
+      "emphasis": [
+        "FUSION",
+        "BRAWL",
+        "hardware foundation for secure lifecycle management"
+      ]
+    },
+    {
+      "block_id": "fusion#hardware",
+      "chunked": false,
+      "type": "text",
+      "level": 2,
+
+      "title": "Arduino Shield for Rapid Prototyping & Evaluation"
+    },
+    {
+      "block_id": "fusion#hardware-shield",
+      "chunked": false,
+      "type": "image",
+      "level": 2,
+
+      "title": "Arduino Shield for Rapid Prototyping & Evaluation",
+      "src": "images/fusion-shield.png",
+      "alt": "RIoT Secure Arduino-compatible FUSION shield for prototyping"
+    },
+    {
+      "block_id": "fusion#hardware-sheild-explained",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": null,
+      "text": "To simplify evaluation and early development, RIoT Secure has created an Arduino-compatible FUSION shield that demonstrates the hardware sandbox architecture in a practical, hands-on form. The shield integrates a dedicated communication and lifecycle management microcontroller alongside an Arduino-compatible application processor, clearly illustrating the separation of concerns enforced by FUSION. Using the shield, developers can:\n\n- Prototype applications using familiar Arduino tools and workflows\n- Run application code on a fully independent microcontroller\n- Observe real-time behavior without interference from communication or security tasks\n- Evaluate secure communication, provisioning, and lifecycle management in a controlled environment\n\nImportantly, the Arduino shield is a reference platform, not a constraint. Production systems are free to use any microcontroller architecture, toolchain, or programming environment - from bare-metal C to RTOS-based designs - while retaining the same FUSION-based hardware separation.",
+      "emphasis": [
+        "FUSION",
+        "Arduino-compatible",
+        "shield",
+        "reference platform"
+      ]
+    },
+    {
+      "block_id": "fusion#hardware-uno-r4",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Native Support for Arduino UNO R4",
+      "text": "FUSION also supports platforms where the separation of concerns is already present at the hardware level. A notable example is the Arduino UNO R4, which integrates an ESP32-based communication subsystem alongside a Renesas Cortex-M4 application processor. On the Arduino UNO R4, FUSION can be deployed without an external shield, leveraging the existing dual-processor architecture to maintain the same separation between communication, security, and customer-controlled application logic. The ESP32 handles secure communication and lifecycle operations, while the Cortex-M4 remains fully dedicated to application execution, real-time behavior, and peripheral control.\n\nThis native support demonstrates that FUSION is not tied to a specific form factor or board design. Whether implemented using a reference Arduino shield or a modern dual-processor platform like the UNO R4, FUSION consistently enforces hardware-level isolation and predictable execution - from prototyping through to production.",
+      "emphasis": [
+        "FUSION",
+        "Arduino UNO R4",
+        "ESP32-based communication subsystem",
+        "Renesas Cortex-M4",
+        "without an external shield"
+      ]
+    },
+    {
+      "block_id": "fusion#footnote",
+      "chunked": true,
+      "type": "footnote",
+      "level": 2,
+
+      "title": null,
+      "text": "FUSION - absolute control for developers, hardware-rooted isolation for security, and a clean foundation for long-term device lifecycle management.",
+      "emphasis": [ ]
+    }
+  ]
+}

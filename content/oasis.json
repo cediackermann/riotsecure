@@ -1,0 +1,163 @@
+{
+  "id": "oasis",
+  "url": "/oasis/",
+  "blocks": [
+    {
+      "block_id": "oasis",
+      "chunked": false,
+      "type": "hero",
+      "level": 1,
+      "title": "Oasis"
+    },
+    {
+      "block_id": "oasis#control-plane",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Lifecycle Control Plane for Intelligent IoT Fleets",
+      "text": "OASIS is RIoT Secure’s lifecycle management and integration layer - the control plane where IoT fleets are provisioned, operated, updated, and governed over time. Designed as a Platform-as-a-Service, OASIS provides secure, end-to-end lifecycle management for deployed devices, from initial onboarding through active operation, updates, repurposing, and decommissioning. As IoT devices evolve into intelligent, software-defined systems - combining long-lived firmware with rapidly changing application logic and AI-enabled functionality - lifecycle management becomes a continuous operational concern. OASIS addresses this challenge by providing a centralized, secure, and scalable environment for managing device state, software versions, and fleet-wide operations across heterogeneous deployments.",
+      "emphasis": [
+        "OASIS",
+        "control plane where IoT fleets are provisioned, operated, updated, and governed over time"
+      ]
+    },
+    {
+      "block_id": "oasis#fleet-management",
+      "chunked": false,
+      "type": "text",
+      "level": 3,
+
+      "title": "Fleet Management Without Friction"
+    },
+    {
+      "block_id": "oasis#fleet-management-visual",
+      "chunked": false,
+      "type": "image",
+      "level": 3,
+
+      "title": "Fleet Management Without Friction",
+      "src": "images/oasis-integration.png",
+      "alt": "OASIS integration diagram showing fleet management"
+    },
+    {
+      "block_id": "oasis#fleet-management-explained",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": null,
+      "text": "OASIS provides a comprehensive management console that gives operators immediate visibility into their IoT deployment. Devices can be monitored in real time, visualized geographically, and grouped according to deployment, function, or lifecycle state. Firmware versions, update campaigns, and device status can all be managed from a single interface - reducing operational overhead and eliminating the need for physical access to devices in the field. At the same time, OASIS is designed to stay out of the way. For organizations that already operate their own IoT dashboards, analytics platforms, or operational tools, OASIS does not force a new user experience or workflow.",
+      "emphasis": [
+        "OASIS",
+        "comprehensive management console",
+        "stay out of the way"
+      ]
+    },
+    {
+      "block_id": "oasis#api-first",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "API-First by Design - Management That Can Be Invisible",
+      "text": "At the core of OASIS is a complete, fully featured REST API that exposes all lifecycle management functionality. The OASIS web interface itself is built on top of this API, ensuring that every capability - from provisioning and configuration to firmware updates and lifecycle state management - can be integrated directly into existing systems. This API-first approach allows OASIS to operate as an embedded lifecycle engine within larger IoT platforms. Device manufacturers, system integrators, and AI solution providers can integrate RIoT Secure’s lifecycle management invisibly into their own products, maintaining a consistent end-user experience while relying on OASIS for secure device control behind the scenes.",
+      "emphasis": [
+        "OASIS",
+        "complete, fully featured REST API",
+        "embedded lifecycle engine"
+      ]
+    },
+    {
+      "block_id": "oasis#lifecycle",
+      "chunked": false,
+      "type": "text",
+      "level": 3,
+
+      "title": "Secure Firmware and Software Lifecycle Management"
+    },
+    {
+      "block_id": "oasis#lifecycle-visual",
+      "chunked": false,
+      "type": "image",
+      "level": 3,
+
+      "title": "Secure Firmware and Software Lifecycle Management",
+      "src": "images/oasis-lifecycle.png",
+      "alt": "OASIS firmware and software lifecycle management diagram"
+    },
+    {
+      "block_id": "oasis#firmware",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": null,
+      "text": "Firmware remains the foundation of any IoT device, and managing its evolution securely is critical - especially as devices increasingly perform local processing, real-time decision-making, and AI-driven workloads at the edge. OASIS enables secure Over-the-Air (OTA) updates of device firmware, ensuring that devices remain up to date, resilient, and protected throughout their operational lifetime. By coordinating updates through the RIoT Secure platform, OASIS ensures that lifecycle operations are performed safely and predictably, even across large, geographically distributed fleets. This capability is important in environments where devices are difficult or costly to access, and where downtime or failed updates are unacceptable.",
+      "emphasis": [
+        "local processing, real-time decision-making, and AI-driven workloads at the edge",
+        "OASIS"
+      ]
+    },
+    {
+      "block_id": "oasis#integration",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Built for Integration and Scale",
+      "text": "OASIS is designed to coexist with existing IoT ecosystems rather than replace them. It integrates seamlessly with RIoT Secure’s communication layer (µTLS), hardware sandboxing (FUSION), and portable execution environments (BRAWL), while remaining agnostic to higher-level visualization, analytics, and business logic platforms. This modular approach allows organizations to adopt OASIS incrementally - using it as a standalone management console, a backend lifecycle service, or a deeply integrated component within a broader IoT solution.",
+      "emphasis": [
+        "OASIS",
+        "µTLS",
+        "FUSION",
+        "BRAWL",
+        "designed to coexist with existing IoT ecosystems rather than replace them",
+        "modular approach"
+      ]
+    },
+    {
+      "block_id": "oasis#real-world",
+      "chunked": false,
+      "type": "text",
+      "level": 3,
+
+      "title": "Proven in Real-World Deployments"
+    },
+    {
+      "block_id": "oasis#real-world-visual",
+      "chunked": false,
+      "type": "image",
+      "level": 3,
+
+      "title": "Proven in Real-World Deployments: SAS Ground Service Handling at Stockholm Arlanda Airport, Sweden.",
+      "src": "images/oasis-map.png",
+      "alt": "OASIS management console map showing real-world deployment"
+    },
+    {
+      "block_id": "oasis#real-world-proven",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Proven in Real-World Deployments",
+      "text": "OASIS has been used to manage production IoT deployments in demanding operational environments, including aviation ground services at Stockholm Arlanda Airport in collaboration with Scandinavian Airlines (SAS). In this context, OASIS supports mission-critical systems where reliability, security, and long-term maintainability are non-negotiable. Deployed across ground service operations, connected devices continuously collect operational data from activities such as aircraft towing, pushback, baggage handling, and other time-critical ground service tasks. OASIS securely aggregates this data and manages the lifecycle of the underlying device firmware, ensuring consistent operation across a geographically distributed fleet operating under strict time and safety constraints.\n\nBeyond device management, the data captured through OASIS-enabled deployments is used to digitize ground operations that were previously manual, fragmented, or paper-based. Operational events generated by connected equipment feed directly into higher-level business systems, enabling automated task assignment, real-time status tracking, and accurate recording of completed services. This data foundation supports downstream processes such as automated billing, performance reporting, and operational analytics - transforming raw device telemetry into actionable business intelligence. By combining secure device lifecycle management with reliable data collection at the edge, OASIS enables organizations like SAS to move from reactive operations to data-driven workflows. The result is improved operational efficiency, reduced administrative overhead, and increased transparency across complex ground service processes - all while maintaining full control over device security and long-term system evolution.",
+      "emphasis": [
+        "OASIS",
+        "mission-critical systems where reliability, security, and long-term maintainability are non-negotiable",
+        "digitize ground operations that were previously manual, fragmented, or paper-based",
+        "transforming raw device telemetry into actionable business intelligence"
+      ]
+    },
+    {
+      "block_id": "oasis#summary",
+      "chunked": true,
+      "type": "footnote",
+      "level": 2,
+
+      "title": null,
+      "text": "OASIS - full lifecycle control when you need it, seamless integration when you don’t.",
+      "emphasis": [ ]
+    }
+  ]
+}

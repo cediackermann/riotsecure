@@ -1,0 +1,150 @@
+{
+  "id": "shield",
+  "url": "/shield/",
+  "blocks": [
+    {
+      "block_id": "shield",
+      "chunked": false,
+      "type": "hero",
+      "level": 1,
+      "title": "Shield"
+    },
+    {
+      "block_id": "shield#overview",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Runtime Firmware Encryption for WebAssembly-Based IoT Applications",
+      "text": "SHIELD is RIoT Secure's runtime firmware protection layer, designed to safeguard application logic and intellectual property on physically accessible IoT devices. Built as a security extension tightly integrated with BRAWL, SHIELD protects WebAssembly-based firmware against reverse engineering, memory inspection, and unauthorized modification - even when an attacker has direct access to the device hardware. Unlike communication security or hardware sandboxing, SHIELD addresses a different threat model: the moment firmware is at rest or executing on the device itself.",
+      "emphasis": [
+        "SHIELD",
+        "BRAWL",
+        "runtime firmware protection layer",
+        "the moment firmware is at rest or executing on the device itself"
+      ]
+    },
+    {
+      "block_id": "shield#physical-attack",
+      "chunked": true,
+      "type": "text",
+
+      "level": 3,
+      "title": "When Physical Access Becomes the Attack Vector"
+    },
+    {
+      "block_id": "shield#physical-attack-visual",
+      "chunked": false,
+      "type": "image",
+      "level": 3,
+
+      "title": null,
+      "src": "images/shield-unprotected.png",
+      "alt": "Diagram showing the risk of unprotected firmware under physical access"
+    },
+    {
+      "block_id": "shield#physical-access",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": null,
+      "text": "In many real-world deployments, IoT devices operate in environments where physical access cannot be prevented. Once a device is accessed, traditional protections often fall apart: firmware can be extracted from flash memory, disassembled using standard toolchains, and analyzed or modified at leisure. This risk is amplified in embedded systems where application logic is compiled into well-known instruction sets such as ARM, AVR, or MIPS. With readily available debugging tools, reverse engineering becomes a practical - and often straightforward - attack.\n\nSHIELD exists specifically to address this gap.",
+      "emphasis": [
+        "SHIELD",
+        "physical access cannot be prevented",
+        "extracted from flash memory",
+        "and often straightforward"
+      ]
+    },
+    {
+      "block_id": "shield#layer-secutiry",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "A Different Layer of Security - Beyond Transport and Hardware Isolation",
+      "text": "Many security approaches focus on protecting communication channels or isolating execution through hardware mechanisms. While these measures are essential, they do not prevent an attacker from extracting or analyzing firmware once it resides on the device. SHIELD operates inside the execution environment itself, encrypting application logic and memory regions in real time. Firmware is delivered to each device in encrypted form, decrypted only within the controlled context of the BRAWL runtime. This ensures that:\n\n- Extracted firmware images are unusable\n- Application logic cannot be statically analyzed\n- Memory inspection yields encrypted data\n- Firmware modification attempts are detected or rendered ineffective\n\nEach device receives a unique encrypted firmware instance, further reducing the value of any single compromise.",
+      "emphasis": [
+        "SHIELD",
+        "BRAWL"
+      ]
+    },
+    {
+      "block_id": "shield#protection",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Runtime Protection Without Custom Hardware"
+    },
+    {
+      "block_id": "shield#protection-visual",
+      "chunked": false,
+      "type": "image",
+      "level": 3,
+
+      "title": null,
+      "src": "images/shield-overview.png",
+      "alt": "Overview diagram of SHIELD runtime protection architecture"
+    },
+    {
+      "block_id": "shield#protection-benefit",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": null,
+      "text": "Traditional approaches to firmware protection often rely on intrusive hardware countermeasures - secure memory regions, proprietary chips, or vendor-specific IP protection features - which must be designed into the hardware early and can significantly increase cost and complexity. SHIELD provides comparable protection without requiring specialized hardware. By integrating encryption directly into the WebAssembly execution model, SHIELD delivers strong intellectual property protection as part of the software lifecycle - making it deployable across a wide range of hardware platforms without redesign. This makes SHIELD particularly well-suited for scalable IoT deployments where hardware diversity and long product lifetimes are the norm.",
+      "emphasis": [
+        "SHIELD",
+        "must be designed into the hardware early",
+        "increase cost and complexity",
+        "integrating encryption directly"
+      ]
+    },
+    {
+      "block_id": "shield#designed-for-webassembly",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Designed for WebAssembly, Integrated with BRAWL",
+      "text": "SHIELD is purpose-built for WebAssembly-based execution and operates as a native extension of the BRAWL runtime. This tight integration allows SHIELD to protect firmware dynamically, rather than relying on static encryption schemes that can be bypassed once decrypted in memory. Together, BRAWL and SHIELD provide:\n\n- A portable, standardized execution layer (WebAssembly)\n- A sandboxed runtime environment\n- Continuous, real-time protection of application logic and memory\n- Secure lifecycle delivery through OASIS and µTLS\n\nThis layered approach ensures that WebAssembly modules remain protected from delivery, through execution, and throughout the device lifecycle.",
+      "emphasis": [
+        "SHIELD",
+        "BRAWL",
+        "OASIS",
+        "µTLS",
+        "WebAssembly-based execution",
+        "from delivery, through execution, and throughout the device lifecycle"
+      ]
+    },
+    {
+      "block_id": "shield#protect-intellecutual-property",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Protecting Intellectual Property at Scale",
+      "text": "SHIELD is designed for organizations whose competitive advantage depends on proprietary algorithms, business logic, or data processing workflows deployed at the edge. By protecting firmware at runtime, SHIELD enables companies to deploy advanced functionality - including AI-related logic - without exposing valuable intellectual property to reverse engineering or cloning. This protection remains effective even as firmware is updated over the air, ensuring that intellectual property stays protected throughout the entire lifecycle of the device.",
+      "emphasis": [
+        "SHIELD",
+        "competitive advantage depends on proprietary algorithms",
+        "without exposing valuable intellectual property"
+      ]
+    },
+    {
+      "block_id": "shield#footnote",
+      "chunked": true,
+      "type": "footnote",
+      "level": 2,
+
+      "title": null,
+      "text": "SHIELD - runtime protection for WebAssembly firmware, securing what matters most when devices are physically accessible.",
+      "emphasis": [
+        "SHIELD", "runtime protection for WebAssembly firmware, securing what matters most when devices are physically accessible."
+      ]
+    }
+  ]
+}

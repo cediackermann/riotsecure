@@ -1,0 +1,104 @@
+{
+  "id": "microTLS",
+  "url": "/microTLS/",
+  "blocks": [
+    {
+      "block_id": "microTLS",
+      "chunked": false,
+      "type": "hero",
+      "level": 1,
+
+      "title": "microTLS (µTLS)"
+    },
+    {
+      "block_id": "microTLS#overview",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Patented Lightweight Secure Communications for Constrained IoT Environments",
+      "text": "µTLS (microTLS) is RIoT Secure’s patented communication protocol, purpose-built to provide strong, end-to-end security for resource-constrained IoT devices without the overhead, complexity, or inefficiency of traditional TLS-based approaches. Designed specifically for microcontrollers and embedded environments, µTLS enables secure device communication even in scenarios where bandwidth, power, and memory are severely limited. Protected by US Patent 11,997,165 B2, µTLS represents original work in secure communication tailored to constrained systems. The protocol dramatically reduces communication overhead - by up to 95% compared to MQTT over TLS - while preserving cryptographic integrity, confidentiality, and trust throughout the device lifecycle.",
+      "emphasis": [ "µTLS", "strong, end-to-end security for resource-constrained IoT devices", "US Patent 11,997,165 B2" ]
+    },
+    {
+      "block_id": "microTLS#security",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Security Without Compromise",
+      "text": "µTLS handles the full complexity of secure communication on behalf of the device. From secure device identification and trust establishment, to key exchange, encryption, and continuous integrity verification, µTLS ensures that all data exchanged between devices and backend systems remains confidential, authenticated, and tamper-proof. While inspired by the principles of the Transport Layer Security (TLS) standard, µTLS is not a lightweight re-implementation of TLS. Instead, it rethinks secure communication from the ground up to meet the realities of embedded systems - eliminating unnecessary overhead while retaining strong security guarantees.",
+      "emphasis": [ "µTLS", "not a lightweight re-implementation of TLS" ]
+    },
+    {
+      "block_id": "microTLS#token",
+      "chunked": false,
+      "type": "image",
+      "level": 3,
+
+      "title": "µTLS Token Exchange",
+      "src": "images/microTLS-workflow.png",
+      "alt": "Diagram showing µTLS token exchange."
+    },
+    {
+      "block_id": "microTLS#constrained",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Designed for Constrained Environments",
+      "text": "Traditional security protocols often assume ample memory, processing power, and stable network conditions - assumptions that rarely hold true in real-world IoT deployments. µTLS is explicitly designed to operate within the tight constraints of microcontrollers, making secure communication viable even on low-power, low-bandwidth devices. Well-known cryptographic algorithms have been carefully adapted and optimized to minimize code size and memory footprint. Developers can select the algorithms best suited to their target hardware, and additional algorithms can be added modularly as requirements evolve - extending device lifetimes without sacrificing security.",
+      "emphasis": [ "µTLS" ]
+    },
+    {
+      "block_id": "microTLS#transport",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Transport-Agnostic by Design",
+      "text": "µTLS operates independently of the underlying transport, enabling secure communication across any bi-directional data stream. This includes, but is not limited to TCP/IP, Serial (RS323, TTL), 6LoWPAN, Zigbee, BLE (Bluetooth Low Energy), RF and proprietary radio links. This flexibility allows µTLS to secure communication not only between devices and cloud services, but also within sensor meshes and gateway-based topologies - ensuring consistent security across heterogeneous networks.",
+      "emphasis": [ "µTLS", "any bi-directional data stream" ]
+    },
+    {
+      "block_id": "microTLS#topology",
+      "chunked": false,
+      "type": "image",
+      "level": 3,
+
+      "title": "µTLS Network Topologies",
+      "src": "images/microTLS-topology.png",
+      "alt": "Diagram showing µTLS network topologies."
+    },
+    {
+      "block_id": "microTLS#integration",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Built for Developers, Trusted for Production",
+      "text": "From a developer perspective, µTLS is intentionally simple to integrate. Familiar development patterns - such as those used in Arduino-based environments - allow developers to focus on application logic rather than cryptography or networking internals. Two clearly defined callbacks handle message creation and response processing, while µTLS manages the underlying security mechanisms transparently. In production, this simplicity translates into predictable behavior, reduced attack surface, and long-term maintainability - critical properties for devices expected to operate securely for many years in the field.",
+      "emphasis": [ "µTLS", "predictable behavior, reduced attack surface, and long-term maintainability" ]
+    },
+    {
+      "block_id": "microTLS#foundation",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "A Foundational Security Layer for Lifecycle Management",
+      "text": "Within the RIoT Secure Platform, µTLS serves as the foundational communication security layer, underpinning device provisioning, lifecycle operations, Over-the-Air (OTA) updates, and fleet management. Whether devices are running native firmware within a hardware sandbox or executing portable WebAssembly-based application logic, µTLS ensures that all communication remains secure, efficient, and verifiable throughout the device lifecycle.",
+      "emphasis": [ "µTLS", "foundational communication security layer" ]
+    },
+    {
+      "block_id": "microTLS#footnote",
+      "chunked": true,
+      "type": "footnote",
+      "level": 2,
+
+      "title": null,
+      "text": "µTLS - patented security, engineered for the realities of embedded IoT.",
+      "emphasis": [ ]
+    }    
+  ]
+}

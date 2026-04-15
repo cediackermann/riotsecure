@@ -1,0 +1,206 @@
+{
+  "id": "platform",
+  "url": "/platform/",
+  "blocks": [
+    {
+      "block_id": "platform#lcm",
+      "chunked": false,
+      "type": "hero",
+      "level": 1,
+
+      "title": "Secure Device Lifecycle Management for IoT"
+    }, 
+
+    {
+      "block_id": "platform#lcm-explainer",
+      "chunked": false,
+      "type": "video",
+      "level": 2,
+
+      "title": "RIoT Secure - Explainer Video",
+      "embed_url": "https://vimeo.com/996920984",
+      "provider": "Vimeo",
+      "author": "Aaron Ardiri"
+    },
+
+    {
+      "block_id": "platform#lcm-lead",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": null,
+      "text": "The RIoT Secure platform manages the full lifecycle of intelligent IoT devices, from initial provisioning and onboarding to long-term operation, software updates, and eventual decommissioning. Designed specifically for resource-constrained environments, the platform enables secure deployment and controlled evolution of devices that combine long-lived native firmware with rapidly evolving application logic, AI workloads, and portable execution environments such as WebAssembly. Rather than replacing existing cloud or connectivity solutions, the RIoT Secure platform integrates alongside them as a foundational lifecycle component. By providing hardware-rooted identity, secure communication, and lifecycle governance, the platform addresses a critical gap in many IoT deployments: consistent lifecycle management across heterogeneous devices, software stacks, and execution models.",
+      "emphasis": [ "RIoT Secure platform" ]
+    },
+
+    {
+      "block_id": "platform#lcm-architecture",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Client-Server Architecture",
+      "text": "The RIoT Secure platform follows a client-server architecture designed for secure lifecycle management of IoT devices. On the device side, a minimal embedded security core provides hardware-rooted trust, secure communication, and strict separation of concerns from the application processor. In the cloud, the RIoT Secure control plane manages device provisioning, ownership, software updates, policy enforcement, and lifecycle state across the entire device fleet. Together, the device security core and the cloud control plane provide consistent visibility and control from device provisioning through operation and retirement, without compromising performance on resource-constrained hardware.",
+      "emphasis": [ "RIoT Secure platform", "RIoT Secure control plane" ]
+    },
+
+    {
+      "block_id": "platform#lcm-software-delivery",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Secure software delivery and OTA updates",
+      "text": "Secure and efficient software delivery is a core capability of the RIoT Secure platform. Native firmware, application logic, AI models, and WebAssembly modules can all be securely deployed and updated over the air without requiring physical access to the device. This capability allows organizations to operate large, geographically distributed fleets while minimizing downtime, reducing operational risk, and avoiding costly on-site maintenance. By decoupling long-lived firmware from rapidly evolving application logic and AI workloads, the RIoT Secure platform enables software components to be updated safely and independently as system requirements evolve.",
+      "emphasis": [ "RIoT Secure platform" ]
+    },
+
+    {
+      "block_id": "platform#lcm-stack-intro",
+      "type": "text",
+      "chunked": false,
+      "level": 2,
+
+      "title": "Platform Technology Stack",
+      "text": "The RIoT Secure platform is built as a modular technology stack that separates communication, security, execution environments, and lifecycle management. Each layer is designed to address a specific responsibility in the lifecycle of intelligent IoT devices. Together, these components form a cohesive platform that enables secure communication, controlled software evolution, and long-term operational governance across heterogeneous device fleets."
+    },
+
+    {
+      "block_id": "platform#lcm-microtls",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "microTLS",
+      "text": "The µTLS communication layer provides secure and efficient communication between IoT devices and the RIoT Secure control plane. µTLS reduces transmission overhead compared to traditional HTTPS or MQTT-based approaches, making secure communication practical even for low-power and bandwidth-constrained devices. Despite its efficiency, µTLS preserves strong cryptographic guarantees and maintains end-to-end trust between devices and cloud infrastructure.",
+      "emphasis": [ "µTLS", "RIoT Secure control plane" ]
+    },
+
+    {
+      "block_id": "platform#lcm-fusion",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "FUSION",
+      "text": "FUSION provides a secure hardware sandbox for native firmware and external microcontrollers within the RIoT Secure platform. By isolating communication and security functions from application logic, FUSION allows developers to run custom firmware or control external hardware while preserving the platform’s lifecycle and security guarantees.",
+      "emphasis": [ "FUSION" ]
+    },
+
+    {
+      "block_id": "platform#lcm-oasis",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "OASIS",
+      "text": "OASIS is the REST API and web-based control interface for the RIoT Secure platform. Through OASIS, operators can manage device identities, software versions, update campaigns, and lifecycle state across heterogeneous device fleets. The interface provides centralized visibility and operational control, enabling organizations to maintain consistent policies and traceability throughout the lifecycle of their IoT deployments.",
+      "emphasis": [ "OASIS" ]
+    },
+
+    {
+      "block_id": "platform#lcm-brawl",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "BRAWL",
+      "text": "BRAWL provides a WebAssembly-based execution environment within the RIoT Secure platform. By running application logic inside a portable WebAssembly runtime, BRAWL allows functionality and AI workloads to be deployed and updated independently of native firmware. This approach enables faster iteration while maintaining strict isolation from security-critical platform components.",
+      "emphasis": [ "BRAWL" ]
+    },
+
+    {
+      "block_id": "platform#lcm-shield",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "SHIELD",
+      "text": "SHIELD adds an additional encryption layer for WebAssembly binaries deployed through the RIoT Secure platform. By encrypting application modules before deployment, SHIELD protects intellectual property and prevents reverse engineering even when devices operate in physically accessible or untrusted environments.",
+      "emphasis": [ "SHIELD" ]
+    },
+
+    {
+      "block_id": "platform#lcm-separation-of-concerns",
+      "chunked": true,
+      "type": "text",
+      "level": 3,
+
+      "title": "Separation of Concerns",
+      "text": "The RIoT Secure platform enforces a strict separation of concerns on the device by isolating security, communication, and application execution environments. This architecture prevents application logic from interfering with security-critical operations and ensures that lifecycle management functions remain protected even if application code is modified or updated.",
+      "emphasis": [ "RIoT Secure platform", "separation of concerns" ]
+    },
+
+    {
+      "block_id": "platform#lcm-stack-links",
+      "chunked": false,
+      "type": "links",
+      "level": 2,
+
+      "title": null,
+      "text": "Explore the individual technology stacks below to learn more about how each component contributes to secure, long-term lifecycle management:",
+      "links": [
+          { "label": "µTLS", "url": "/microTLS/" },
+          { "label": "FUSION", "url": "/fusion/" },
+          { "label": "OASIS", "url": "/oasis/" },
+          { "label": "BRAWL", "url": "/brawl/" },
+          { "label": "SHIELD", "url": "/shield/" }
+      ],
+      "size": 3
+    },
+    
+    {
+      "block_id": "platform#lcm-summary",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Secure Lifecycle Management for Intelligent Devices",
+      "text": "Through its modular architecture and clear separation between communication, security, execution environments, and lifecycle governance, the RIoT Secure platform enables organizations to deploy intelligent IoT systems that remain secure, maintainable, and adaptable over time. Whether devices rely on native firmware, WebAssembly modules, AI models, or a combination of these technologies, the platform provides the lifecycle control required to manage them safely at scale.",
+      "emphasis": [ "RIoT Secure platform" ]
+    },
+
+    {
+      "block_id": "platform#hardware",
+      "chunked": false,
+      "type": "hero",
+      "level": 1,
+
+      "title": "Lifecycle-First Hardware Architecture (Custom Hardware)"
+    },
+
+    {
+      "block_id": "platform#hardware-visual",
+      "chunked": false,
+      "type": "image",
+      "level": 2,
+
+      "title": "Custom Hardware - Lifecycle Management and Security Guaranteed",
+      "src": "images/platform-lifecycle-first-architecture.png",
+      "alt": "Diagram of lifecycle-first hardware architecture with separated application and security/communication domains"
+    },
+
+    {
+      "block_id": "platform#hardware-need",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": null,
+      "text": "The RIoT Secure platform is delivered as a Platform as a Service (PaaS), but some deployments require hardware architectures that standard off-the-shelf telematics devices do not provide. Many commercial devices tightly couple application logic, communication, and security within a single processing environment, which makes strict separation of concerns difficult to enforce over long device lifetimes. When hardware limitations prevent reliable isolation, RIoT Secure designs custom hardware platforms optimized for secure lifecycle management. These platforms enforce a hardware sandbox architecture in which application logic - including AI workloads - runs on a dedicated microcontroller, while communication, security, and lifecycle management operate independently.",
+      "emphasis": [ "RIoT Secure platform", "Platform as a Service (PaaS)" ]
+    },
+
+    {
+      "block_id": "platform#hardware-pcbs",
+      "chunked": true,
+      "type": "text",
+      "level": 2,
+
+      "title": "Custom Hardware Platforms and PCBs",
+      "text": "RIoT Secure has designed and deployed custom printed circuit boards (PCBs) tailored to customer operational environments when required to enforce lifecycle and security guarantees. These hardware designs are aligned with the RIoT Secure platform separation-of-concerns architecture and are intentionally flexible, allowing network topology, GNSS modules, and sensor configurations to be adapted as customer requirements evolve. While some modern development platforms support this separation naturally, many industrial telematics devices do not. By providing hardware options where necessary, RIoT Secure enables customers to maintain a strong lifecycle and security posture without being constrained by off-the-shelf device architectures.",
+      "emphasis": [ "RIoT Secure platform" ]
+    }
+  ]
+}
