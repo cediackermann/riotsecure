@@ -93,12 +93,17 @@ if [ -d "/Applications/Docker.app" ]; then
     print_success "Docker Desktop is already installed"
 else
     print_warning "Installing Docker Desktop via Homebrew..."
-    brew install --cask docker
+    brew install --cask docker-desktop
     print_success "Docker Desktop installed"
 fi
 
 print_warning "Opening Docker Desktop..."
-open -a Docker
+if [ -d "/Applications/Docker.app" ]; then
+    open -a Docker
+else
+    print_error "Docker.app not found in /Applications. Please install Docker Desktop manually."
+    exit 1
+fi
 
 echo ""
 echo "MANUAL STEP REQUIRED:"
