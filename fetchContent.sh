@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 OUTPUT_DIR="content"
 INPUT_FILE="${1:-urls.txt}"
