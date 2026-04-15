@@ -1,0 +1,6 @@
+https://riotsecure.se/shield/content.json
+https://riotsecure.se/brawl/content.json
+https://riotsecure.se/oasis/content.json
+https://riotsecure.se/fusion/content.json
+https://riotsecure.se/microTLS/content.json
+https://www.riotsecure.se/platform/content.json
