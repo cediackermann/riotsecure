@@ -2,6 +2,16 @@
 
 > Step-by-step instructions for setting up a Mac Mini from scratch.
 
+## Quick Start
+
+For automated setup, run the provided script:
+
+```bash
+./setup.sh
+```
+
+The script automates most steps and pauses for manual configuration when needed (Docker settings, web interface setup, etc.). For detailed manual instructions, continue reading below.
+
 ---
 
 ## 1. Homebrew
