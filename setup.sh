@@ -179,9 +179,28 @@ else
 fi
 
 # =============================================================================
-# STEP 3: Docker Desktop
+# STEP 3: Clone Repository
 # =============================================================================
-print_step "STEP 3: Installing Docker Desktop"
+print_step "STEP 3: Setting up Repository"
+
+# Clone or update the repository first, as Onyx will be installed here
+if [ -d ~/riotsecure ]; then
+    print_warning "riotsecure directory already exists"
+    cd ~/riotsecure
+    git pull
+    print_success "Repository updated"
+else
+    print_warning "Cloning riotsecure repository..."
+    cd ~
+    git clone https://github.com/cediackermann/riotsecure.git
+    cd ~/riotsecure
+    print_success "Repository cloned"
+fi
+
+# =============================================================================
+# STEP 4: Docker Desktop
+# =============================================================================
+print_step "STEP 4: Installing Docker Desktop"
 
 if [ -d "/Applications/Docker.app" ]; then
     print_success "Docker Desktop is already installed"
@@ -220,11 +239,11 @@ done
 print_success "Docker is ready"
 
 # =============================================================================
-# STEP 4: Onyx
+# STEP 5: Onyx
 # =============================================================================
-print_step "STEP 4: Installing Onyx"
+print_step "STEP 5: Installing Onyx"
 
-if [ -d ~/onyx_data ]; then
+if [ -d ~/riotsecure/onyx_data ]; then
     print_warning "Onyx data directory already exists. Skipping installation."
 else
     print_warning "Installing Onyx..."
@@ -233,6 +252,9 @@ else
     echo "  2. Choose '2' for Standard"
     echo "  3. Press ENTER for Edge"
     echo ""
+
+    # Ensure we're in the riotsecure directory so onyx_data is created there
+    cd ~/riotsecure
 
     # Download and run Onyx installer
     # Note: The interactive prompts need to be handled by the user
@@ -247,25 +269,12 @@ sudo pmset -a sleep 0 disksleep 0
 print_success "Sleep prevention configured"
 
 # =============================================================================
-# STEP 5: Ollama Models
+# STEP 6: Ollama Models
 # =============================================================================
-print_step "STEP 5: Setting up Ollama Models"
+print_step "STEP 6: Setting up Ollama Models"
 
-# Check if we're already in the riotsecure directory
-if [ ! -f "./updateModels.sh" ]; then
-    if [ -d ~/riotsecure ]; then
-        print_warning "riotsecure directory already exists"
-        cd ~/riotsecure
-        git pull
-    else
-        print_warning "Cloning riotsecure repository..."
-        cd ~
-        git clone https://github.com/cediackermann/riotsecure.git
-        cd ~/riotsecure
-    fi
-else
-    print_success "Already in riotsecure directory"
-fi
+# Ensure we're in the riotsecure directory
+cd ~/riotsecure
 
 print_warning "Creating Ollama models from modelfiles..."
 if [ -f "./updateModels.sh" ]; then
@@ -277,9 +286,9 @@ else
 fi
 
 # =============================================================================
-# STEP 6: Web Interface Configuration
+# STEP 7: Web Interface Configuration
 # =============================================================================
-print_step "STEP 6: Web Interface Configuration"
+print_step "STEP 7: Web Interface Configuration"
 
 echo ""
 echo "MANUAL STEPS REQUIRED:"
@@ -299,9 +308,9 @@ echo ""
 wait_for_user
 
 # =============================================================================
-# STEP 7: RAG Content Upload
+# STEP 8: RAG Content Upload
 # =============================================================================
-print_step "STEP 7: RAG Content Upload"
+print_step "STEP 8: RAG Content Upload"
 
 echo "Choose content upload method:"
 echo "  A - Upload as File (recommended)"
@@ -372,8 +381,8 @@ fi
 
 echo ""
 echo "Useful commands:"
-echo "  - View Onyx logs: cd ~/onyx_data && docker compose logs -f"
-echo "  - Restart Onyx: cd ~/onyx_data && docker compose restart"
+echo "  - View Onyx logs: cd ~/riotsecure/onyx_data && docker compose logs -f"
+echo "  - Restart Onyx: cd ~/riotsecure/onyx_data && docker compose restart"
 echo "  - List Ollama models: ollama list"
 echo "  - Update Ollama models: cd ~/riotsecure && ./updateModels.sh modelfiles"
 echo ""

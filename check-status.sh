@@ -158,12 +158,12 @@ fi
 # =============================================================================
 print_section "Onyx"
 
-if [ -d ~/onyx_data ]; then
+if [ -d ~/riotsecure/onyx_data ]; then
     echo -e "$PASS Onyx data directory exists"
 
     # Check if Onyx containers are running
     if command -v docker &> /dev/null && docker info &> /dev/null; then
-        cd ~/onyx_data 2>/dev/null
+        cd ~/riotsecure/onyx_data 2>/dev/null
         if [ -f "docker-compose.yaml" ] || [ -f "docker-compose.yml" ]; then
             echo -e "$PASS Docker Compose file found"
 
@@ -174,7 +174,7 @@ if [ -d ~/onyx_data ]; then
                 docker ps --filter "name=onyx" --format "  $INFO {{.Names}} ({{.Status}})"
             else
                 echo -e "$WARN No Onyx containers running"
-                echo -e "  ${INFO} Start with: cd ~/onyx_data && docker compose up -d"
+                echo -e "  ${INFO} Start with: cd ~/riotsecure/onyx_data && docker compose up -d"
                 OVERALL_STATUS=1
             fi
         fi
@@ -258,7 +258,7 @@ else
     echo "Common fixes:"
     echo "  • Docker not running → Open Docker Desktop"
     echo "  • Ollama not running → Run: ollama serve"
-    echo "  • Onyx not running → cd ~/onyx_data && docker compose up -d"
+    echo "  • Onyx not running → cd ~/riotsecure/onyx_data && docker compose up -d"
     echo "  • Low disk space → Free up disk space"
     echo ""
     exit 1

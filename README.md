@@ -81,7 +81,7 @@ When prompted:
 2. Choose **2** for Standard
 3. Press **Enter** for Edge
 
-Onyx creates `~/onyx_data/`, which contains the Docker Compose file (useful for manually stopping or modifying images). There is also a `.env` file — leave it untouched.
+Onyx creates `~/riotsecure/onyx_data/`, which contains the Docker Compose file (useful for manually stopping or modifying images). There is also a `.env` file — leave it untouched.
 
 ### Prevent Sleep
 
