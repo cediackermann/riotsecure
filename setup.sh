@@ -268,7 +268,14 @@ echo -e "${GREEN}✓ All automated steps completed successfully!${NC}"
 echo ""
 echo "Your RIoT AI system should now be ready to use."
 echo ""
-echo "Access the web interface at: ${BLUE}http://localhost:3000${NC}"
+echo -e "Access the web interface at: ${BLUE}http://localhost:3000${NC}"
+
+# Get local IP address
+LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "Unable to detect")
+if [ "$LOCAL_IP" != "Unable to detect" ]; then
+    echo -e "From other devices on the network: ${BLUE}http://${LOCAL_IP}:3000${NC}"
+fi
+
 echo ""
 echo "Useful commands:"
 echo "  - View Onyx logs: cd ~/onyx_data && docker compose logs -f"
