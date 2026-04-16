@@ -4,9 +4,17 @@
 
 ## Quick Start
 
-For automated setup, run the provided script:
+**One-line installation** (recommended):
 
 ```bash
+curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup.sh | bash
+```
+
+Or clone and run locally:
+
+```bash
+git clone https://github.com/cediackermann/riotsecure.git
+cd riotsecure
 ./setup.sh
 ```
 
@@ -15,6 +23,7 @@ The script automates most steps and pauses for manual configuration when needed 
 **After installation**, verify everything is working:
 
 ```bash
+cd ~/riotsecure
 ./check-status.sh
 ```
 
