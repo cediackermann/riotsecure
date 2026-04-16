@@ -7,7 +7,7 @@
 **One-line installation** (recommended):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup.sh | bash
+bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup.sh)
 ```
 
 Or clone and run locally:
