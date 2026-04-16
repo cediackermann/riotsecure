@@ -40,15 +40,109 @@ check_mac() {
     fi
 }
 
+preflight_checks() {
+    print_step "Pre-flight System Checks"
+
+    local PREFLIGHT_FAILED=0
+
+    # Check macOS version
+    MACOS_VERSION=$(sw_vers -productVersion)
+    MACOS_MAJOR=$(echo $MACOS_VERSION | cut -d. -f1)
+    echo -e "macOS Version: ${BLUE}$MACOS_VERSION${NC}"
+
+    if [ "$MACOS_MAJOR" -lt 12 ]; then
+        print_error "macOS 12 (Monterey) or later recommended. You have: $MACOS_VERSION"
+        PREFLIGHT_FAILED=1
+    else
+        print_success "macOS version compatible"
+    fi
+
+    # Check available disk space
+    AVAILABLE_GB=$(df -g / | awk 'NR==2 {print $4}')
+    echo -e "Available disk space: ${BLUE}${AVAILABLE_GB}GB${NC}"
+
+    if [ "$AVAILABLE_GB" -lt 30 ]; then
+        print_error "Insufficient disk space. Required: 30GB+, Available: ${AVAILABLE_GB}GB"
+        echo "  Docker images, Ollama models, and Onyx require significant storage"
+        PREFLIGHT_FAILED=1
+    elif [ "$AVAILABLE_GB" -lt 50 ]; then
+        print_warning "Low disk space. Recommended: 50GB+, Available: ${AVAILABLE_GB}GB"
+        echo "  Installation will proceed but may fail if space runs out"
+    else
+        print_success "Sufficient disk space available"
+    fi
+
+    # Check total memory
+    TOTAL_MEM_GB=$(sysctl -n hw.memsize | awk '{print int($1/1024/1024/1024)}')
+    echo -e "Total system memory: ${BLUE}${TOTAL_MEM_GB}GB${NC}"
+
+    if [ "$TOTAL_MEM_GB" -lt 16 ]; then
+        print_warning "Low memory. Recommended: 16GB+, Available: ${TOTAL_MEM_GB}GB"
+        echo "  Docker will be configured with 20GB limit (may need adjustment)"
+    else
+        print_success "Sufficient memory available"
+    fi
+
+    # Check internet connectivity
+    if ping -c 1 -W 2 8.8.8.8 &> /dev/null; then
+        print_success "Internet connectivity verified"
+    else
+        print_error "No internet connection detected"
+        echo "  Internet required to download Homebrew, Docker, Ollama, etc."
+        PREFLIGHT_FAILED=1
+    fi
+
+    # Check if Docker is already running (might conflict)
+    if pgrep -x "Docker" > /dev/null 2>&1; then
+        print_warning "Docker Desktop is already running"
+        echo "  This is fine if it's already installed, otherwise it may cause conflicts"
+    fi
+
+    # Check if port 3000 is already in use
+    if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+        print_warning "Port 3000 is already in use"
+        echo "  Onyx web interface requires port 3000 to be available"
+        echo "  You may need to stop the conflicting service"
+    fi
+
+    # Estimate installation time
+    echo ""
+    echo -e "${YELLOW}⏱  Estimated installation time: 20-40 minutes${NC}"
+    echo "  (depends on internet speed and system performance)"
+    echo ""
+
+    # Show what will be installed
+    echo "The following will be installed/configured:"
+    echo "  • Homebrew (package manager)"
+    echo "  • Ollama (AI model runtime)"
+    echo "  • Docker Desktop (containerization)"
+    echo "  • Onyx (web interface)"
+    echo "  • RIoT AI models (several GB download)"
+    echo ""
+
+    if [ $PREFLIGHT_FAILED -eq 1 ]; then
+        print_error "Pre-flight checks failed. Please resolve the issues above."
+        echo ""
+        echo "Continue anyway? (not recommended) [y/N]"
+        read -r response
+        if [[ ! "$response" =~ ^[Yy]$ ]]; then
+            print_error "Setup aborted by user"
+            exit 1
+        fi
+    else
+        print_success "Pre-flight checks passed"
+    fi
+
+    echo ""
+    echo "Press ENTER to begin installation..."
+    read
+}
+
 # Check if running on macOS
 check_mac
 
-print_step "RIoT AI Setup Script - Mac Mini Configuration"
-echo "This script will guide you through setting up the RIoT AI system."
-echo "Some steps require manual interaction and will pause for your input."
-echo ""
-echo "Press ENTER to begin..."
-read
+# Run pre-flight checks
+preflight_checks
 
 # =============================================================================
 # STEP 1: Homebrew

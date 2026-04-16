@@ -10,7 +10,15 @@ For automated setup, run the provided script:
 ./setup.sh
 ```
 
-The script automates most steps and pauses for manual configuration when needed (Docker settings, web interface setup, etc.). For detailed manual instructions, continue reading below.
+The script automates most steps and pauses for manual configuration when needed (Docker settings, web interface setup, etc.). 
+
+**After installation**, verify everything is working:
+
+```bash
+./check-status.sh
+```
+
+For detailed manual instructions, continue reading below.
 
 ---
 
