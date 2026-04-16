@@ -27,6 +27,13 @@ cd ~/riotsecure
 ./check-status.sh
 ```
 
+**To uninstall**, run the cleanup script:
+
+```bash
+cd ~/riotsecure
+./cleanup.sh
+```
+
 For detailed manual instructions, continue reading below.
 
 ---

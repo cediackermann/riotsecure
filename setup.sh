@@ -178,6 +178,23 @@ else
     print_success "Ollama installed successfully"
 fi
 
+# Ensure Ollama service is running
+print_warning "Starting Ollama service..."
+if ! pgrep -x "ollama" > /dev/null; then
+    # Start Ollama in the background
+    nohup ollama serve > /tmp/ollama.log 2>&1 &
+    sleep 3  # Give it time to start
+
+    if pgrep -x "ollama" > /dev/null; then
+        print_success "Ollama service started"
+    else
+        print_warning "Ollama service may not have started properly"
+        echo "  Check logs at: /tmp/ollama.log"
+    fi
+else
+    print_success "Ollama service already running"
+fi
+
 # =============================================================================
 # STEP 3: Clone Repository
 # =============================================================================
