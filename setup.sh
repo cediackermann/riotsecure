@@ -399,7 +399,7 @@ fi
 echo ""
 echo "Useful commands:"
 echo "  - View Onyx logs: cd ~/riotsecure/onyx_data && docker compose logs -f"
-echo "  - Restart Onyx: cd ~/riotsecure/onyx_data && docker compose restart"
+echo "  - Restart Onyx: cd ~/riotsecure/onyx_data/deployment && docker compose restart"
 echo "  - List Ollama models: ollama list"
 echo "  - Update Ollama models: cd ~/riotsecure && ./updateModels.sh modelfiles"
 echo ""
