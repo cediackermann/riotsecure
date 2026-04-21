@@ -2,6 +2,10 @@
 
 > Step-by-step instructions for setting up a Mac Mini from scratch.
 
+## Presentation Link
+
+[Link](https://docs.google.com/presentation/d/12XRHySp_W6Mrh64nA_6Hi3s8XvliUoANP-p_ha0FHEA/edit?usp=sharing)
+
 ## Quick Start
 
 **One-line installation** (recommended):
