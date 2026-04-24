@@ -74,50 +74,66 @@ detect_ollama_host() {
         return
     fi
 
-    # Get IPs of devices currently visible on the network from the ARP table
-    local ARP_IPS
-    ARP_IPS=$(arp -a 2>/dev/null | grep -v incomplete | grep -oE '\(([0-9]{1,3}\.){3}[0-9]{1,3}\)' | tr -d '()')
-    if [ -z "$ARP_IPS" ]; then
+    local LOCAL_IP
+    LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
+    if [ -z "$LOCAL_IP" ]; then
         echo "" >&2
-        print_warning "No devices found in ARP table." >&2
+        print_warning "Could not determine local IP address." >&2
     else
-        local COUNT
-        COUNT=$(echo "$ARP_IPS" | wc -l | tr -d ' ')
+        local SUBNET
+        SUBNET=$(echo "$LOCAL_IP" | cut -d. -f1-3)
+
+        # Ping-sweep the subnet in parallel to populate the ARP cache,
+        # then read ARP for live hosts and check port 11434 on all of them.
         echo "" >&2
-        print_warning "Scanning $COUNT network devices for Ollama (port 11434)..." >&2
-
-        local TMPFILE
-        TMPFILE=$(mktemp)
-
-        while IFS= read -r ip; do
-            echo -e "  ${BLUE}→${NC} Checking $ip..." >&2
-            ( nc -z -w 1 "$ip" 11434 2>/dev/null && echo "$ip" >> "$TMPFILE" ) &
-        done <<< "$ARP_IPS"
+        print_warning "Ping-sweeping ${SUBNET}.0/24 to find live devices..." >&2
+        for i in $(seq 1 254); do
+            ping -c1 -W1 "${SUBNET}.${i}" &>/dev/null &
+        done
         wait
 
-        local FOUND=()
-        while IFS= read -r ip; do
-            FOUND+=("$ip")
-        done < "$TMPFILE"
-        rm -f "$TMPFILE"
+        local ARP_IPS
+        ARP_IPS=$(arp -a 2>/dev/null | grep -v incomplete | grep -oE '\(([0-9]{1,3}\.){3}[0-9]{1,3}\)' | tr -d '()')
 
-        if [ ${#FOUND[@]} -eq 1 ]; then
-            echo "${FOUND[0]}"
-            return
-        elif [ ${#FOUND[@]} -gt 1 ]; then
-            echo "" >&2
-            print_warning "Multiple hosts with Ollama found:" >&2
-            for i in "${!FOUND[@]}"; do
-                echo "  $((i+1))) ${FOUND[$i]}" >&2
-            done
-            echo "" >&2
-            read -p "Select the Ollama host (1-${#FOUND[@]}): " pick <&2
-            echo "${FOUND[$((pick-1))]}"
-            return
+        if [ -z "$ARP_IPS" ]; then
+            print_warning "No live devices found on ${SUBNET}.0/24." >&2
+        else
+            local COUNT
+            COUNT=$(echo "$ARP_IPS" | wc -l | tr -d ' ')
+            print_warning "Checking $COUNT live devices for Ollama (port 11434)..." >&2
+
+            local TMPFILE
+            TMPFILE=$(mktemp)
+
+            while IFS= read -r ip; do
+                echo -e "  ${BLUE}→${NC} Checking $ip..." >&2
+                ( nc -z -w 1 "$ip" 11434 2>/dev/null && echo "$ip" >> "$TMPFILE" ) &
+            done <<< "$ARP_IPS"
+            wait
+
+            local FOUND=()
+            while IFS= read -r ip; do
+                FOUND+=("$ip")
+            done < "$TMPFILE"
+            rm -f "$TMPFILE"
+
+            if [ ${#FOUND[@]} -eq 1 ]; then
+                echo "${FOUND[0]}"
+                return
+            elif [ ${#FOUND[@]} -gt 1 ]; then
+                echo "" >&2
+                print_warning "Multiple hosts with Ollama found:" >&2
+                for i in "${!FOUND[@]}"; do
+                    echo "  $((i+1))) ${FOUND[$i]}" >&2
+                done
+                echo "" >&2
+                read -p "Select the Ollama host (1-${#FOUND[@]}): " pick <&2
+                echo "${FOUND[$((pick-1))]}"
+                return
+            fi
+
+            print_warning "Ollama not found on any live device." >&2
         fi
-
-        echo "" >&2
-        print_warning "Ollama not found on any network device." >&2
     fi
 
     # Nothing found — ask the user directly
