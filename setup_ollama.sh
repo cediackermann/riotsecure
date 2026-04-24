@@ -3,20 +3,43 @@
 # Run this on the machine that will host AI models only.
 # No Docker required on this device.
 #
-# Usage: ./setup_ollama.sh
+# Usage (one-liner):
+#   bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup_ollama.sh)
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/steps/common.sh"
-source "$SCRIPT_DIR/steps/preflight.sh"
-source "$SCRIPT_DIR/steps/step_homebrew.sh"
-source "$SCRIPT_DIR/steps/step_ollama.sh"
-source "$SCRIPT_DIR/steps/step_repo.sh"
-source "$SCRIPT_DIR/steps/step_models.sh"
+# Minimal helpers needed before the repo is cloned
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
+_info()    { echo -e "${BLUE}$1${NC}"; }
+_success() { echo -e "${GREEN}✓ $1${NC}"; }
+_warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
+_error()   { echo -e "${RED}✗ $1${NC}"; exit 1; }
 
-check_mac
+[[ "$OSTYPE" != "darwin"* ]] && _error "This script is designed for macOS."
 
+# ---------------------------------------------------------------------------
+# Clone or update the repo first so step files are available
+# ---------------------------------------------------------------------------
+_info "Setting up riotsecure repository..."
+if [ -d ~/riotsecure ]; then
+    _warning "Repository already exists — updating..."
+    git -C ~/riotsecure pull
+else
+    git clone https://github.com/cediackermann/riotsecure.git ~/riotsecure
+fi
+_success "Repository ready at ~/riotsecure"
+
+# Source all shared step files from the cloned repo
+REPO="$HOME/riotsecure"
+source "$REPO/steps/common.sh"
+source "$REPO/steps/preflight.sh"
+source "$REPO/steps/step_homebrew.sh"
+source "$REPO/steps/step_ollama.sh"
+source "$REPO/steps/step_models.sh"
+
+# ---------------------------------------------------------------------------
+# Main setup
+# ---------------------------------------------------------------------------
 echo ""
 echo -e "${BLUE}RIoT Secure — Ollama Device Setup${NC}"
 echo "This machine will run Ollama and serve AI models to the Onyx device."
@@ -32,7 +55,6 @@ echo ""
 preflight_checks --skip-docker
 
 install_homebrew
-setup_repo
 install_ollama
 setup_models
 
@@ -44,22 +66,21 @@ print_step "Ollama Device Setup Complete!"
 echo ""
 echo -e "${GREEN}✓ Ollama is running and models are loaded.${NC}"
 echo ""
-echo "Next steps:"
-echo "  1. Note this machine's local IP address:"
+
 LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
 
 if [ -n "$LOCAL_IP" ]; then
     echo -e "${BLUE}===================================================${NC}"
     echo -e "${GREEN}  Run this command on the Onyx device:${NC}"
     echo ""
-    echo -e "  ${YELLOW}./setup_onyx.sh --ollama-host ${LOCAL_IP}${NC}"
+    echo -e "  ${YELLOW}bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup_onyx.sh) --ollama-host ${LOCAL_IP}${NC}"
     echo ""
     echo -e "${BLUE}===================================================${NC}"
 else
     print_warning "Could not detect local IP address automatically."
     echo "  Find it manually with:  ipconfig getifaddr en0"
     echo "  Then on the Onyx device run:"
-    echo -e "  ${YELLOW}./setup_onyx.sh --ollama-host <this-machine-IP>${NC}"
+    echo -e "  ${YELLOW}bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup_onyx.sh) --ollama-host <this-machine-IP>${NC}"
 fi
 
 echo ""

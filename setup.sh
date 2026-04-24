@@ -3,23 +3,48 @@
 # For a split setup (Onyx on one machine, Ollama on another) use:
 #   setup_onyx.sh  — on the Onyx device
 #   setup_ollama.sh — on the Ollama device
+#
+# Usage (one-liner):
+#   bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup.sh)
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/steps/common.sh"
-source "$SCRIPT_DIR/steps/preflight.sh"
-source "$SCRIPT_DIR/steps/step_homebrew.sh"
-source "$SCRIPT_DIR/steps/step_ollama.sh"
-source "$SCRIPT_DIR/steps/step_repo.sh"
-source "$SCRIPT_DIR/steps/step_docker.sh"
-source "$SCRIPT_DIR/steps/step_onyx.sh"
-source "$SCRIPT_DIR/steps/step_models.sh"
-source "$SCRIPT_DIR/steps/step_webconfig.sh"
-source "$SCRIPT_DIR/steps/step_rag.sh"
+# Minimal helpers needed before the repo is cloned
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
+_info()    { echo -e "${BLUE}$1${NC}"; }
+_success() { echo -e "${GREEN}✓ $1${NC}"; }
+_warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
+_error()   { echo -e "${RED}✗ $1${NC}"; exit 1; }
 
-check_mac
+[[ "$OSTYPE" != "darwin"* ]] && _error "This script is designed for macOS."
 
+# ---------------------------------------------------------------------------
+# Clone or update the repo first so step files are available
+# ---------------------------------------------------------------------------
+_info "Setting up riotsecure repository..."
+if [ -d ~/riotsecure ]; then
+    _warning "Repository already exists — updating..."
+    git -C ~/riotsecure pull
+else
+    git clone https://github.com/cediackermann/riotsecure.git ~/riotsecure
+fi
+_success "Repository ready at ~/riotsecure"
+
+# Source all shared step files from the cloned repo
+REPO="$HOME/riotsecure"
+source "$REPO/steps/common.sh"
+source "$REPO/steps/preflight.sh"
+source "$REPO/steps/step_homebrew.sh"
+source "$REPO/steps/step_ollama.sh"
+source "$REPO/steps/step_docker.sh"
+source "$REPO/steps/step_onyx.sh"
+source "$REPO/steps/step_models.sh"
+source "$REPO/steps/step_webconfig.sh"
+source "$REPO/steps/step_rag.sh"
+
+# ---------------------------------------------------------------------------
+# Main setup
+# ---------------------------------------------------------------------------
 echo ""
 echo -e "${BLUE}RIoT Secure — Full Single-Device Setup${NC}"
 echo ""
@@ -37,7 +62,6 @@ preflight_checks
 
 install_homebrew
 install_ollama
-setup_repo
 install_docker
 install_onyx
 setup_models
@@ -54,8 +78,8 @@ echo -e "${GREEN}✓ All automated steps completed successfully!${NC}"
 echo ""
 echo -e "Access the web interface at: ${BLUE}http://localhost:3000${NC}"
 
-LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "Unable to detect")
-if [ "$LOCAL_IP" != "Unable to detect" ]; then
+LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
+if [ -n "$LOCAL_IP" ]; then
     echo -e "From other devices on the network: ${BLUE}http://${LOCAL_IP}:3000${NC}"
 fi
 

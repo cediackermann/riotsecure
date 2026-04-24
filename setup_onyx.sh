@@ -3,84 +3,22 @@
 # Run this on the machine that will host the Onyx web interface.
 # Docker is required on this device; Ollama is NOT installed here.
 #
-# Usage:
-#   ./setup_onyx.sh                         # auto-detect Ollama host
-#   ./setup_onyx.sh --ollama-host <IP>      # override with a specific host
+# Usage (one-liner):
+#   bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup_onyx.sh)
+#   bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup_onyx.sh) --ollama-host <IP>
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "$SCRIPT_DIR/steps/common.sh"
-source "$SCRIPT_DIR/steps/preflight.sh"
-source "$SCRIPT_DIR/steps/step_homebrew.sh"
-source "$SCRIPT_DIR/steps/step_repo.sh"
-source "$SCRIPT_DIR/steps/step_docker.sh"
-source "$SCRIPT_DIR/steps/step_onyx.sh"
-source "$SCRIPT_DIR/steps/step_webconfig.sh"
-source "$SCRIPT_DIR/steps/step_rag.sh"
+# Minimal helpers needed before the repo is cloned
+RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
+_info()    { echo -e "${BLUE}$1${NC}"; }
+_success() { echo -e "${GREEN}✓ $1${NC}"; }
+_warning() { echo -e "${YELLOW}⚠ $1${NC}"; }
+_error()   { echo -e "${RED}✗ $1${NC}"; exit 1; }
 
-check_mac
+[[ "$OSTYPE" != "darwin"* ]] && _error "This script is designed for macOS."
 
-# ---------------------------------------------------------------------------
-# Detect where Ollama is running
-# ---------------------------------------------------------------------------
-detect_ollama_host() {
-    # 1. Check if Ollama is reachable on the Docker host (single-device)
-    if curl -sf --connect-timeout 2 http://host.docker.internal:11434 >/dev/null 2>&1; then
-        echo "host.docker.internal"
-        return
-    fi
-
-    # 2. Scan the local /24 subnet for port 11434
-    local LOCAL_IP
-    LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
-    if [ -z "$LOCAL_IP" ]; then
-        echo ""
-        return
-    fi
-
-    local SUBNET
-    SUBNET=$(echo "$LOCAL_IP" | cut -d. -f1-3)
-
-    print_warning "Ollama not found locally — scanning ${SUBNET}.0/24 for Ollama..."
-
-    local FOUND=()
-    for i in $(seq 1 254); do
-        (nc -z -w 1 "${SUBNET}.${i}" 11434 2>/dev/null && echo "${SUBNET}.${i}") &
-    done
-    # Collect results as background jobs finish
-    while IFS= read -r line; do
-        FOUND+=("$line")
-    done < <(wait; jobs -p | xargs -I{} wait {} 2>/dev/null; true)
-
-    # Re-run synchronously to get output (background approach above doesn't capture stdout cleanly)
-    FOUND=()
-    for i in $(seq 1 254); do
-        if nc -z -w 1 "${SUBNET}.${i}" 11434 2>/dev/null; then
-            FOUND+=("${SUBNET}.${i}")
-        fi
-    done
-
-    if [ ${#FOUND[@]} -eq 1 ]; then
-        echo "${FOUND[0]}"
-    elif [ ${#FOUND[@]} -gt 1 ]; then
-        # Multiple hosts found — let the user pick
-        echo "" >&2
-        print_warning "Multiple hosts with Ollama found:" >&2
-        for i in "${!FOUND[@]}"; do
-            echo "  $((i+1))) ${FOUND[$i]}" >&2
-        done
-        echo "" >&2
-        read -p "Select the Ollama host (1-${#FOUND[@]}): " pick >&2
-        echo "${FOUND[$((pick-1))]}"
-    else
-        echo ""
-    fi
-}
-
-# ---------------------------------------------------------------------------
-# Parse arguments
-# ---------------------------------------------------------------------------
+# Parse arguments before cloning so --ollama-host is available throughout
 OLLAMA_HOST_OVERRIDE=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -96,6 +34,75 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+# ---------------------------------------------------------------------------
+# Clone or update the repo first so step files are available
+# ---------------------------------------------------------------------------
+_info "Setting up riotsecure repository..."
+if [ -d ~/riotsecure ]; then
+    _warning "Repository already exists — updating..."
+    git -C ~/riotsecure pull
+else
+    git clone https://github.com/cediackermann/riotsecure.git ~/riotsecure
+fi
+_success "Repository ready at ~/riotsecure"
+
+# Source all shared step files from the cloned repo
+REPO="$HOME/riotsecure"
+source "$REPO/steps/common.sh"
+source "$REPO/steps/preflight.sh"
+source "$REPO/steps/step_homebrew.sh"
+source "$REPO/steps/step_docker.sh"
+source "$REPO/steps/step_onyx.sh"
+source "$REPO/steps/step_webconfig.sh"
+source "$REPO/steps/step_rag.sh"
+
+# ---------------------------------------------------------------------------
+# Detect where Ollama is running
+# ---------------------------------------------------------------------------
+detect_ollama_host() {
+    if curl -sf --connect-timeout 2 http://host.docker.internal:11434 >/dev/null 2>&1; then
+        echo "host.docker.internal"
+        return
+    fi
+
+    local LOCAL_IP
+    LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
+    if [ -z "$LOCAL_IP" ]; then
+        echo ""
+        return
+    fi
+
+    local SUBNET
+    SUBNET=$(echo "$LOCAL_IP" | cut -d. -f1-3)
+
+    print_warning "Ollama not found locally — scanning ${SUBNET}.0/24 for Ollama..."
+
+    local FOUND=()
+    for i in $(seq 1 254); do
+        if nc -z -w 1 "${SUBNET}.${i}" 11434 2>/dev/null; then
+            FOUND+=("${SUBNET}.${i}")
+        fi
+    done
+
+    if [ ${#FOUND[@]} -eq 1 ]; then
+        echo "${FOUND[0]}"
+    elif [ ${#FOUND[@]} -gt 1 ]; then
+        echo "" >&2
+        print_warning "Multiple hosts with Ollama found:" >&2
+        for i in "${!FOUND[@]}"; do
+            echo "  $((i+1))) ${FOUND[$i]}" >&2
+        done
+        echo "" >&2
+        read -p "Select the Ollama host (1-${#FOUND[@]}): " pick >&2
+        echo "${FOUND[$((pick-1))]}"
+    else
+        echo ""
+    fi
+}
+
+# ---------------------------------------------------------------------------
+# Main setup
+# ---------------------------------------------------------------------------
 echo ""
 echo -e "${BLUE}RIoT Secure — Onyx Device Setup${NC}"
 echo ""
@@ -110,13 +117,10 @@ echo ""
 preflight_checks
 
 install_homebrew
-setup_repo
 install_docker
 install_onyx
 
-# ---------------------------------------------------------------------------
-# Resolve Ollama host (after Docker is running so host.docker.internal works)
-# ---------------------------------------------------------------------------
+# Resolve Ollama host after Docker is running so host.docker.internal works
 if [ -n "$OLLAMA_HOST_OVERRIDE" ]; then
     OLLAMA_HOST="$OLLAMA_HOST_OVERRIDE"
     echo -e "Using provided Ollama host: ${BLUE}${OLLAMA_HOST}${NC}"
