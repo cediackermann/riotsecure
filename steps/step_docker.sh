@@ -16,13 +16,19 @@ install_docker() {
     softwareupdate --install-rosetta --agree-to-license
     print_success "Rosetta 2 ready"
 
+    print_warning "Waiting for Docker.app to appear in /Applications..."
+    local WAIT=0
+    while [ ! -d "/Applications/Docker.app" ]; do
+        if [ $WAIT -ge 30 ]; then
+            print_error "Docker.app not found in /Applications after 30s. Please install Docker Desktop manually."
+            exit 1
+        fi
+        sleep 2
+        WAIT=$((WAIT + 2))
+    done
+
     print_warning "Opening Docker Desktop..."
-    if [ -d "/Applications/Docker.app" ]; then
-        open -a Docker
-    else
-        print_error "Docker.app not found in /Applications. Please install Docker Desktop manually."
-        exit 1
-    fi
+    open -a Docker
 
     echo ""
     echo "MANUAL STEP REQUIRED:"
