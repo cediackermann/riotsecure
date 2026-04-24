@@ -12,6 +12,10 @@ install_docker() {
         print_success "Docker Desktop installed"
     fi
 
+    print_warning "Installing Rosetta 2 (required by Docker)..."
+    softwareupdate --install-rosetta --agree-to-license
+    print_success "Rosetta 2 ready"
+
     print_warning "Opening Docker Desktop..."
     if [ -d "/Applications/Docker.app" ]; then
         open -a Docker
