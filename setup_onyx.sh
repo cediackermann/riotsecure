@@ -74,24 +74,28 @@ detect_ollama_host() {
         return
     fi
 
-    local LOCAL_IP
-    LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null || echo "")
-    if [ -z "$LOCAL_IP" ]; then
+    # Get IPs of devices currently visible on the network from the ARP table
+    local ARP_IPS
+    ARP_IPS=$(arp -a 2>/dev/null | grep -v incomplete | grep -oE '\(([0-9]{1,3}\.){3}[0-9]{1,3}\)' | tr -d '()')
+    if [ -z "$ARP_IPS" ]; then
         echo ""
         return
     fi
 
-    local SUBNET
-    SUBNET=$(echo "$LOCAL_IP" | cut -d. -f1-3)
+    print_warning "Ollama not found locally — checking $(echo "$ARP_IPS" | wc -l | tr -d ' ') network devices in parallel..."
 
-    print_warning "Ollama not found locally — scanning ${SUBNET}.0/24 for Ollama..."
-
+    # Check all ARP devices for port 11434 simultaneously
+    local TMPFILE
+    TMPFILE=$(mktemp)
+    while IFS= read -r ip; do
+        ( nc -z -w 1 "$ip" 11434 2>/dev/null && echo "$ip" >> "$TMPFILE" ) &
+    done <<< "$ARP_IPS"
+    wait
     local FOUND=()
-    for i in $(seq 1 254); do
-        if nc -z -w 1 "${SUBNET}.${i}" 11434 2>/dev/null; then
-            FOUND+=("${SUBNET}.${i}")
-        fi
-    done
+    while IFS= read -r ip; do
+        FOUND+=("$ip")
+    done < "$TMPFILE"
+    rm -f "$TMPFILE"
 
     if [ ${#FOUND[@]} -eq 1 ]; then
         echo "${FOUND[0]}"
