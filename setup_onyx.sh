@@ -78,39 +78,52 @@ detect_ollama_host() {
     local ARP_IPS
     ARP_IPS=$(arp -a 2>/dev/null | grep -v incomplete | grep -oE '\(([0-9]{1,3}\.){3}[0-9]{1,3}\)' | tr -d '()')
     if [ -z "$ARP_IPS" ]; then
-        echo ""
-        return
-    fi
-
-    print_warning "Ollama not found locally — checking $(echo "$ARP_IPS" | wc -l | tr -d ' ') network devices in parallel..."
-
-    # Check all ARP devices for port 11434 simultaneously
-    local TMPFILE
-    TMPFILE=$(mktemp)
-    while IFS= read -r ip; do
-        ( nc -z -w 1 "$ip" 11434 2>/dev/null && echo "$ip" >> "$TMPFILE" ) &
-    done <<< "$ARP_IPS"
-    wait
-    local FOUND=()
-    while IFS= read -r ip; do
-        FOUND+=("$ip")
-    done < "$TMPFILE"
-    rm -f "$TMPFILE"
-
-    if [ ${#FOUND[@]} -eq 1 ]; then
-        echo "${FOUND[0]}"
-    elif [ ${#FOUND[@]} -gt 1 ]; then
         echo "" >&2
-        print_warning "Multiple hosts with Ollama found:" >&2
-        for i in "${!FOUND[@]}"; do
-            echo "  $((i+1))) ${FOUND[$i]}" >&2
-        done
-        echo "" >&2
-        read -p "Select the Ollama host (1-${#FOUND[@]}): " pick >&2
-        echo "${FOUND[$((pick-1))]}"
+        print_warning "No devices found in ARP table." >&2
     else
-        echo ""
+        local COUNT
+        COUNT=$(echo "$ARP_IPS" | wc -l | tr -d ' ')
+        echo "" >&2
+        print_warning "Scanning $COUNT network devices for Ollama (port 11434)..." >&2
+
+        local TMPFILE
+        TMPFILE=$(mktemp)
+
+        while IFS= read -r ip; do
+            echo -e "  ${BLUE}→${NC} Checking $ip..." >&2
+            ( nc -z -w 1 "$ip" 11434 2>/dev/null && echo "$ip" >> "$TMPFILE" ) &
+        done <<< "$ARP_IPS"
+        wait
+
+        local FOUND=()
+        while IFS= read -r ip; do
+            FOUND+=("$ip")
+        done < "$TMPFILE"
+        rm -f "$TMPFILE"
+
+        if [ ${#FOUND[@]} -eq 1 ]; then
+            echo "${FOUND[0]}"
+            return
+        elif [ ${#FOUND[@]} -gt 1 ]; then
+            echo "" >&2
+            print_warning "Multiple hosts with Ollama found:" >&2
+            for i in "${!FOUND[@]}"; do
+                echo "  $((i+1))) ${FOUND[$i]}" >&2
+            done
+            echo "" >&2
+            read -p "Select the Ollama host (1-${#FOUND[@]}): " pick <&2
+            echo "${FOUND[$((pick-1))]}"
+            return
+        fi
+
+        echo "" >&2
+        print_warning "Ollama not found on any network device." >&2
     fi
+
+    # Nothing found — ask the user directly
+    echo "" >&2
+    read -p "Enter the IP address of the Ollama device: " manual_ip <&2
+    echo "$manual_ip"
 }
 
 # ---------------------------------------------------------------------------
@@ -140,11 +153,6 @@ if [ -n "$OLLAMA_HOST_OVERRIDE" ]; then
 else
     print_warning "Detecting Ollama host..."
     OLLAMA_HOST=$(detect_ollama_host)
-
-    if [ -z "$OLLAMA_HOST" ]; then
-        print_warning "Could not detect Ollama automatically."
-        read -p "Enter the IP address or hostname of the Ollama device: " OLLAMA_HOST
-    fi
 
     if [ "$OLLAMA_HOST" = "host.docker.internal" ]; then
         print_success "Ollama detected on this machine (single-device mode)"
