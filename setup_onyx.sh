@@ -35,8 +35,17 @@ while [[ $# -gt 0 ]]; do
 done
 
 # ---------------------------------------------------------------------------
-# Clone or update the repo first so step files are available
+# Bootstrap: Homebrew first (installs Xcode CLT → git), then clone the repo
 # ---------------------------------------------------------------------------
+if ! command -v brew &>/dev/null; then
+    _info "Installing Homebrew (this also installs git via Xcode CLT)..."
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    echo >> ~/.zprofile
+    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    _success "Homebrew installed"
+fi
+
 _info "Setting up riotsecure repository..."
 if [ -d ~/riotsecure ]; then
     _warning "Repository already exists — updating..."
