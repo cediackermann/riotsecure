@@ -20,8 +20,4 @@ install_onyx() {
 
         print_success "Onyx installation complete"
     fi
-
-    print_warning "Configuring power settings to prevent sleep..."
-    sudo pmset -a sleep 0 disksleep 0
-    print_success "Sleep prevention configured"
 }

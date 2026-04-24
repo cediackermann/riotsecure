@@ -64,6 +64,7 @@ source "$REPO/steps/step_docker.sh"
 source "$REPO/steps/step_onyx.sh"
 source "$REPO/steps/step_webconfig.sh"
 source "$REPO/steps/step_rag.sh"
+source "$REPO/steps/step_sleep.sh"
 
 # ---------------------------------------------------------------------------
 # Detect where Ollama is running
@@ -154,6 +155,7 @@ preflight_checks
 install_homebrew
 install_docker
 install_onyx
+prevent_sleep
 
 # Resolve Ollama host after Docker is running so host.docker.internal works
 if [ -n "$OLLAMA_HOST_OVERRIDE" ]; then

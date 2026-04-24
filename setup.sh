@@ -50,6 +50,7 @@ source "$REPO/steps/step_onyx.sh"
 source "$REPO/steps/step_models.sh"
 source "$REPO/steps/step_webconfig.sh"
 source "$REPO/steps/step_rag.sh"
+source "$REPO/steps/step_sleep.sh"
 
 # ---------------------------------------------------------------------------
 # Main setup
@@ -73,6 +74,7 @@ install_homebrew
 install_ollama
 install_docker
 install_onyx
+prevent_sleep
 setup_models
 web_config "host.docker.internal"
 rag_upload

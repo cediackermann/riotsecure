@@ -45,6 +45,7 @@ source "$REPO/steps/preflight.sh"
 source "$REPO/steps/step_homebrew.sh"
 source "$REPO/steps/step_ollama.sh"
 source "$REPO/steps/step_models.sh"
+source "$REPO/steps/step_sleep.sh"
 
 # ---------------------------------------------------------------------------
 # Main setup
@@ -66,6 +67,7 @@ preflight_checks --skip-docker
 install_homebrew
 install_ollama
 setup_models
+prevent_sleep
 
 # =============================================================================
 # Done
