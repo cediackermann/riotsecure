@@ -1,45 +1,21 @@
 #!/bin/bash
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-NC='\033[0m' # No Color
+set -e
 
-# Helper functions
-print_header() {
-    echo -e "\n${BLUE}===================================================${NC}"
-    echo -e "${BLUE}$1${NC}"
-    echo -e "${BLUE}===================================================${NC}\n"
-}
+# Source shared helpers if running from the repo; otherwise define inline.
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [ -f "$SCRIPT_DIR/steps/common.sh" ]; then
+    source "$SCRIPT_DIR/steps/common.sh"
+else
+    RED='\033[0;31m'; GREEN='\033[0;32m'; YELLOW='\033[1;33m'; BLUE='\033[0;34m'; NC='\033[0m'
+    print_header()      { echo -e "\n${BLUE}===================================================${NC}\n${BLUE}$1${NC}\n${BLUE}===================================================${NC}\n"; }
+    print_success()     { echo -e "${GREEN}✓ $1${NC}"; }
+    print_warning()     { echo -e "${YELLOW}⚠ $1${NC}"; }
+    print_error()       { echo -e "${RED}✗ $1${NC}"; }
+    ask_confirmation()  { echo -e "${YELLOW}$1 [y/N]${NC}"; read -r response; [[ "$response" =~ ^[Yy]$ ]]; }
+    check_mac()         { [[ "$OSTYPE" != "darwin"* ]] && { echo -e "${RED}✗ macOS only${NC}"; exit 1; }; }
+fi
 
-print_success() {
-    echo -e "${GREEN}✓ $1${NC}"
-}
-
-print_warning() {
-    echo -e "${YELLOW}⚠ $1${NC}"
-}
-
-print_error() {
-    echo -e "${RED}✗ $1${NC}"
-}
-
-ask_confirmation() {
-    echo -e "${YELLOW}$1 [y/N]${NC}"
-    read -r response
-    [[ "$response" =~ ^[Yy]$ ]]
-}
-
-check_mac() {
-    if [[ "$OSTYPE" != "darwin"* ]]; then
-        print_error "This script is designed for macOS. Exiting."
-        exit 1
-    fi
-}
-
-# Check if running on macOS
 check_mac
 
 print_header "RIoT AI Cleanup Script"
@@ -110,11 +86,10 @@ if command -v ollama &> /dev/null; then
         print_warning "No RIoT models found, skipping"
     fi
 
-    # Optionally remove Ollama itself
     echo ""
     if ask_confirmation "Remove Ollama completely? (This will remove ALL models)"; then
         print_warning "Stopping Ollama service..."
-        pkill -9 ollama 2>/dev/null
+        pkill -9 ollama 2>/dev/null || true
 
         print_warning "Removing Ollama data..."
         rm -rf ~/.ollama
@@ -147,15 +122,14 @@ if [ -d "/Applications/Docker.app" ]; then
 
     if ask_confirmation "Uninstall Docker Desktop?"; then
         print_warning "Quitting Docker Desktop..."
-        osascript -e 'quit app "Docker"' 2>/dev/null
+        osascript -e 'quit app "Docker"' 2>/dev/null || true
         sleep 3
 
         print_warning "Uninstalling Docker Desktop..."
         if command -v brew &> /dev/null; then
-            brew uninstall --cask docker-desktop 2>/dev/null
+            brew uninstall --cask docker-desktop 2>/dev/null || true
         fi
 
-        # Remove Docker data
         if ask_confirmation "Remove Docker data and containers? (WARNING: This affects all Docker usage)"; then
             rm -rf ~/Library/Containers/com.docker.docker
             rm -rf ~/Library/Application\ Support/Docker\ Desktop
@@ -180,14 +154,11 @@ print_header "STEP 4: Repository Cleanup"
 if [ -d ~/riotsecure ]; then
     echo "Found riotsecure repository at ~/riotsecure"
 
-    # Check if there are uncommitted changes
     cd ~/riotsecure
-    if [ -d .git ]; then
-        if ! git diff-index --quiet HEAD -- 2>/dev/null; then
-            print_warning "Repository has uncommitted changes!"
-            git status --short
-            echo ""
-        fi
+    if [ -d .git ] && ! git diff-index --quiet HEAD -- 2>/dev/null; then
+        print_warning "Repository has uncommitted changes!"
+        git status --short
+        echo ""
     fi
 
     if ask_confirmation "Remove the riotsecure repository?"; then
@@ -203,23 +174,9 @@ else
 fi
 
 # =============================================================================
-# STEP 5: Content Directory
+# STEP 5: Power Settings
 # =============================================================================
-print_header "STEP 5: Downloaded Content Cleanup"
-
-if [ -d ~/riotsecure/content ]; then
-    if ask_confirmation "Remove downloaded RAG content?"; then
-        rm -rf ~/riotsecure/content
-        print_success "Content removed"
-    else
-        print_warning "Keeping content"
-    fi
-fi
-
-# =============================================================================
-# STEP 6: Power Settings
-# =============================================================================
-print_header "STEP 6: Power Settings Cleanup"
+print_header "STEP 5: Power Settings Cleanup"
 
 if ask_confirmation "Restore default sleep settings?"; then
     print_warning "Restoring sleep settings..."
@@ -230,9 +187,9 @@ else
 fi
 
 # =============================================================================
-# STEP 7: Homebrew (Optional)
+# STEP 6: Homebrew (Optional)
 # =============================================================================
-print_header "STEP 7: Homebrew Cleanup (Optional)"
+print_header "STEP 6: Homebrew Cleanup (Optional)"
 
 if command -v brew &> /dev/null; then
     echo -e "${YELLOW}Note: Homebrew may be used by many other applications.${NC}"
@@ -243,7 +200,6 @@ if command -v brew &> /dev/null; then
         print_warning "Uninstalling Homebrew..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/uninstall.sh)"
 
-        # Remove Homebrew from shell profile
         if [ -f ~/.zprofile ]; then
             sed -i.bak '/homebrew/d' ~/.zprofile
             print_success "Removed Homebrew from .zprofile"
@@ -262,13 +218,9 @@ print_header "Cleanup Complete"
 
 echo -e "${GREEN}Cleanup process finished!${NC}"
 echo ""
-echo "What was done:"
-echo "  • Reviewed and optionally removed Onyx"
-echo "  • Reviewed and optionally removed Ollama models"
-echo "  • Reviewed and optionally removed Docker Desktop"
-echo "  • Reviewed and optionally removed repository"
-echo "  • Reviewed and optionally restored power settings"
+echo "To reinstall, choose the setup that matches your configuration:"
 echo ""
-echo "To reinstall RIoT AI, run:"
-echo -e "  ${BLUE}bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup.sh)${NC}"
+echo -e "  Single device:   ${BLUE}bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup.sh)${NC}"
+echo -e "  Ollama device:   ${BLUE}bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup_ollama.sh)${NC}"
+echo -e "  Onyx device:     ${BLUE}bash <(curl -fsSL https://raw.githubusercontent.com/cediackermann/riotsecure/main/setup_onyx.sh)${NC}"
 echo ""
