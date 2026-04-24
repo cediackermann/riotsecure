@@ -109,7 +109,16 @@ detect_ollama_host() {
                 echo -e "  ${BLUE}→${NC} Checking $ip..." >&2
                 ( nc -z -w 1 "$ip" 11434 2>/dev/null && echo "$ip" >> "$TMPFILE" ) &
             done <<< "$ARP_IPS"
-            wait
+
+            # Stop as soon as the first result is written
+            while [ "$(jobs -rp | wc -l)" -gt 0 ]; do
+                if [ -s "$TMPFILE" ]; then
+                    kill $(jobs -rp) 2>/dev/null || true
+                    break
+                fi
+                sleep 0.2
+            done
+            wait 2>/dev/null
 
             local FOUND=()
             while IFS= read -r ip; do
